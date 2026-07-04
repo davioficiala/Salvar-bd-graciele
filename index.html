@@ -1,1 +1,140 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marketplace Firebase</title>
+
+<style>
+body{
+font-family:Arial;
+background:#f6f7fb;
+margin:0;
+padding:20px;
+}
+
+h2{
+text-align:center;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:12px;
+box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+input, select{
+width:100%;
+padding:10px;
+margin-top:8px;
+border:1px solid #ddd;
+border-radius:8px;
+}
+
+button{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:#22c55e;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🛒 Marketplace Firebase</h2>
+
+<!-- 🏪 LOJISTA -->
+<div class="card">
+<h3>🏪 Cadastro Lojista</h3>
+<input id="l_nome" placeholder="Nome">
+<input id="l_email" placeholder="Email">
+<input id="l_loja" placeholder="Nome da Loja">
+<button onclick="salvarLojista()">Salvar Lojista</button>
+</div>
+
+<!-- 📦 PRODUTO -->
+<div class="card">
+<h3>📦 Cadastro Produto</h3>
+<input id="p_nome" placeholder="Nome produto">
+<input id="p_preco" placeholder="Preço">
+<input id="p_loja" placeholder="Nome Loja">
+<input id="p_lojistaId" placeholder="ID Lojista">
+<input id="p_img" placeholder="Link imagem">
+<button onclick="salvarProduto()">Salvar Produto</button>
+</div>
+
+<!-- 🛒 PEDIDO -->
+<div class="card">
+<h3>🛒 Criar Pedido</h3>
+<input id="o_produto" placeholder="Nome Produto">
+<input id="o_cliente" placeholder="Nome Cliente">
+<select id="o_status">
+<option value="pendente">Pendente</option>
+<option value="pago">Pago</option>
+<option value="enviado">Enviado</option>
+</select>
+<input id="o_valor" placeholder="Valor">
+<button onclick="salvarPedido()">Salvar Pedido</button>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app = initializeApp({
+apiKey: "AIzaSyAE2VcJyqu01rtqlgVoMg634FFfTGxiRgc",
+authDomain: "brain-orcamento.firebaseapp.com",
+projectId: "brain-orcamento"
+});
+
+const db = getFirestore(app);
+
+window.salvarLojista = async () => {
+
+await addDoc(collection(db,"lojistas"),{
+nome: document.getElementById("l_nome").value,
+email: document.getElementById("l_email").value,
+lojaNome: document.getElementById("l_loja").value
+});
+
+alert("Lojista salvo!");
+};
+
+window.salvarProduto = async () => {
+
+await addDoc(collection(db,"produtos"),{
+nome: document.getElementById("p_nome").value,
+preco: Number(document.getElementById("p_preco").value),
+lojaNome: document.getElementById("p_loja").value,
+lojistaId: document.getElementById("p_lojistaId").value,
+imagem: document.getElementById("p_img").value
+});
+
+alert("Produto salvo!");
+};
+
+window.salvarPedido = async () => {
+
+await addDoc(collection(db,"pedidos"),{
+produto: document.getElementById("o_produto").value,
+cliente: document.getElementById("o_cliente").value,
+status: document.getElementById("o_status").value,
+valor: Number(document.getElementById("o_valor").value)
+});
+
+alert("Pedido salvo!");
+};
+
+</script>
+
+</body>
+</html>
